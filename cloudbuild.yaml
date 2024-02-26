@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/instagram-data-scraper-412708/insta-data:latest', '.']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['push', 'gcr.io/instagram-data-scraper-412708/insta-data:latest']
+
+# Optional step for deploying to App Engine (replace values accordingly)
+- name: 'gcr.io/google.com/appengine/standard'
+  args: ['deploy', '--promote', '--service', 'insta-data', '--version', 'v1']
+
+images:
+- 'gcr.io/instagram-data-scraper-412708/insta-data:latest'
+
+# Optional trigger for automatic builds
+triggers:
+- cloud-source-repository:
+  project: instagram-data-scraper-412708
+  repo: instagram-data-finder
+  branch: main
